@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Joint State Publisher -->
+  <xacro:macro name="agv_joints_state_publisher">    
+  	<gazebo>
+         <plugin name="gz::sim::systems::JointStatePublisher" filename="gz-sim-joint-state-publisher-system">
+            
+            <jointName>caster_front_left_joint,caster_front_right_joint,caster_back_left_joint,caster_back_right_joint,caster_front_left_wheel_joint,caster_front_right_wheel_joint,caster_back_left_wheel_joint,caster_back_right_wheel_joint</jointName>
+            <topic>joint_states</topic>
+            <updateRate>10.0</updateRate>
+            <alwaysOn>true</alwaysOn>
+         </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- Differential Drive Plugin-->
+  <xacro:macro name="agv_diff_drive">
+    <gazebo>
+      <plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
+        <rosDebugLevel>Debug</rosDebugLevel>
+        <publishWheelTF>false</publishWheelTF>
+        <publishOdomTF>true</publishOdomTF>
+        <publishWheelJointState>true</publishWheelJointState>
+        <alwaysOn>true</alwaysOn>
+        <leftJoint>wheel_left_base</leftJoint>
+        <rightJoint>wheel_right_base</rightJoint>
+        <wheelSeparation>0.60</wheelSeparation>
+        <wheelDiameter>0.20</wheelDiameter>
+        <wheelTorque>20</wheelTorque>
+        <wheelAcceleration>5.0</wheelAcceleration>
+        <topic>cmd_velss</topic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <odometrySource>world</odometrySource>
+        <robotBaseFrame>base_link</robotBaseFrame>
+	      <legacyMode>true</legacyMode>
+	      <publishTf>true</publishTf>
+        <updateRate>150.0</updateRate>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+
+
+
+
+  <!-- IMU Plugin -->
+  <xacro:macro name="agv_imu">
+    <gazebo>
+      <plugin name="gz::sim::systems::Imu" filename="gz-sim-imu-system">
+        <alwaysOn>true</alwaysOn>
+        <bodyName>imu_link</bodyName>
+        <frameName>imu_link</frameName>
+        <topicName>imu</topicName>
+        <serviceName>imu_service</serviceName>
+        <gaussianNoise>0.0</gaussianNoise>
+        <updateRate>200</updateRate>
+        <imu>
+          <noise>
+            <type>gaussian</type>
+            <rate>
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </rate>
+            <accel>
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </accel>
+          </noise>
+        </imu>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+</robot>
+
